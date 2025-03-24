@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghidion</title>
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome pentru iconițe -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            color: #222;
+            overflow-x: hidden;
+        }
+
+        /* Bara de navigare */
+        .navbar {
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: #ff385c;
+            transition: transform 0.3s;
+        }
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+        .nav-link {
+            font-weight: 600;
+            color: #222 !important;
+            margin-right: 1rem;
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #ff385c !important;
+        }
+        .btn-primary {
+            background-color: #ff385c;
+            border: none;
+            border-radius: 50px;
+            padding: 0.6rem 2rem;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #e31c5f;
+            transform: scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #ff385c 0%, #e31c5f 100%);
+            padding: 8rem 0;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease-in;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/diagonal-lines.png');
+            opacity: 0.1;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .hero p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+        .hero .btn-light {
+            border-radius: 50px;
+            padding: 1rem 2.5rem;
+            font-weight: 700;
+            background-color: #fff;
+            color: #ff385c;
+            border: none;
+            transition: all 0.3s;
+        }
+        .hero .btn-light:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.1);
+        }
+
+        /* Galerie Foto */
+        .gallery-section {
+            padding: 5rem 0;
+            background: linear-gradient(to bottom, #fff 0%, #f7f7f7 100%);
+        }
+        .gallery-section h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 4rem;
+            color: #222;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .card {
+            border: none;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s, box-shadow 0.4s;
+            background-color: #fff;
+        }
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        .card-img-top {
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 4px solid #ff385c;
+            transition: transform 0.3s;
+        }
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        .card-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #222;
+        }
+        .card-text {
+            font-size: 1.1rem;
+            color: #717171;
+            margin-bottom: 1.5rem;
+        }
+        .gallery-thumbnails {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+        .gallery-thumbnails img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s, opacity 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .gallery-thumbnails img:hover {
+            transform: scale(1.15);
+            opacity: 0.9;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        .lightbox.active {
+            display: flex;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #ff385c 0%, #e31c5f 100%);
+            padding: 3rem 0;
+            color: #fff;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        footer p {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: transform 0.3s;
+        }
+        footer a:hover {
+            transform: scale(1.1);
+            color: #f0f0f0;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/subtle-dots.png');
+            opacity: 0.1;
+        }
+
+        /* Animații */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bara de navigare -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Ghidionovici Lux</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Acasă</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Căutare</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Oferte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Despre noi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="#">Înregistrare</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero text-white text-center">
+        <div class="container">
+            <h1>Găsește cazarea perfectă pentru vacanța ta!</h1>
+            <p>Rezervă acum camere și case unice în locații uimitoare.</p>
+            <a href="#" class="btn btn-light btn-lg">Căutare Cazare</a>
+        </div>
+    </section>
+
+    <!-- Secțiunea de galerie foto -->
+    <section class="gallery-section container">
+        <h2>Galerie Foto</h2>
+        <div class="row">
+            <!-- Locație 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://a0.muscache.com/im/pictures/miso/Hosting-805186737185424979/original/55d16eb9-79ed-479e-817b-bad28bae62f6.jpeg?im_w=720" class="card-img-top" alt="Locație 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Locație 1</h5>
+                        <p class="card-text">Un loc minunat pentru a te relaxa și a te bucura de peisaje.</p>
+                        <div class="gallery-thumbnails">
+                            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-805186737185424979/original/55d16eb9-79ed-479e-817b-bad28bae62f6.jpeg?im_w=720" alt="Locație 1">
+                            <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1152796894625671370/original/4239da91-cb4d-4391-bcf3-adee01d6928b.jpeg?im_w=720" alt="Locație 1">
+                            <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-512933405890558106/original/51567983-934d-4a09-ac50-896054904008.jpeg?im_w=720" alt="Locație 1">
+                        </div>
+                        <a href="#" class="btn btn-primary">Vezi Detalii</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locație 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://a0.muscache.com/im/pictures/miso/Hosting-637328952667942196/original/e34a0fa0-84f7-44dd-b706-86be7ce955e3.jpeg?im_w=720" class="card-img-top" alt="Locație 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Locație 2</h5>
+                        <p class="card-text">Locul perfect pentru o vacanță de neuitat.</p>
+                        <div class="gallery-thumbnails">
+                            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-637328952667942196/original/e34a0fa0-84f7-44dd-b706-86be7ce955e3.jpeg?im_w=720" alt="Locație 2">
+                            <img src="https://a0.muscache.com/im/pictures/c087cc7f-8fd5-49b1-bc35-bae4917b03cc.jpg?im_w=720" alt="Locație 2">
+                            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-47928850/original/2c4c4b91-d38b-4137-a2cb-795dcdb3a7af.jpeg?im_w=720" alt="Locație 2">
+                        </div>
+                        <a href="#" class="btn btn-primary">Vezi Detalii</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locație 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://a0.muscache.com/im/pictures/188faece-901f-4945-b4bf-1bb71d0bb203.jpg?im_w=720" class="card-img-top" alt="Locație 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Locație 3</h5>
+                        <p class="card-text">Oferă confort și priveliști uimitoare din orice unghi.</p>
+                        <div class="gallery-thumbnails">
+                            <img src="https://a0.muscache.com/im/pictures/188faece-901f-4945-b4bf-1bb71d0bb203.jpg?im_w=720" alt="Locație 3">
+                            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-53216468/original/1dd637a1-9214-45d5-976e-decd4ad689cb.jpeg?im_w=720" alt="Locație 3">
+                            <img src="https://a0.muscache.com/im/pictures/d809e6b0-d114-4b33-a59d-328827b4caa9.jpg?im_w=720" alt="Locație 3">
+                        </div>
+                        <a href="#" class="btn btn-primary">Vezi Detalii</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locație 4 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://a0.muscache.com/im/pictures/1a82a32a-e8e5-44eb-8a43-d2ae67284f0d.jpg?im_w=720" class="card-img-top" alt="Locație 4">
+                    <div class="card-body">
+                        <h5 class="card-title">Locație 4</h5>
+                        <p class="card-text">O escapadă rustică în mijlocul naturii.</p>
+                        <div class="gallery-thumbnails">
+                            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-1103378825108947405/original/f38d67e1-d4da-4bc1-98bc-2561ed4389aa.jpeg?im_w=720" alt="Locație 4">
+                            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-979510900392679522/original/cdb021fd-5dd7-4a5b-8b69-bdff8b4016af.jpeg?im_w=720" alt="Locație 4">
+                            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-1103378825108947405/original/f38d67e1-d4da-4bc1-98bc-2561ed4389aa.jpeg?im_w=720" alt="Locație 4">
+                        </div>
+                        <a href="#" class="btn btn-primary">Vezi Detalii</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locație 5 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-659179555212670599/original/9b2d9953-5602-41ac-9abc-1d2e239a9bc0.jpeg?im_w=720" class="card-img-top" alt="Locație 5">
+                    <div class="card-body">
+                        <h5 class="card-title">Locație 5</h5>
+                        <p class="card-text">Lux și modernitate într-un cadru urban.</p>
+                        <div class="gallery-thumbnails">
+                            <img src="https://a0.muscache.com/im/pictures/0ac5af41-18c7-4c7e-9ea5-f7a03fc79527.jpg?im_w=720" alt="Locație 5">
+                            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-801469325050384862/original/0a31ec7d-bbf5-4700-9d14-03a3c6dcde6c.jpeg?im_w=720" alt="Locație 5">
+                            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-1015211279312297664/original/6d29fef9-7053-40e1-b0d7-f669335a906c.jpeg?im_w=720" alt="Locație 5">
+                        </div>
+                        <a href="#" class="btn btn-primary">Vezi Detalii</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locație 6 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="https://a0.muscache.com/im/pictures/miso/Hosting-692545756513809186/original/20381ec0-601b-4ee9-9696-a9de31ffc8e5.jpeg?im_w=720" class="card-img-top" alt="Locație 6">
+                    <div class="card-body">
+                        <h5 class="card-title">Locație 6</h5>
+                        <p class="card-text">Aventură și peisaje spectaculoase.</p>
+                        <div class="gallery-thumbnails">
+                            <img src="https://a0.muscache.com/im/pictures/airflow/Hosting-739106009205216336/original/fbac542e-b7a3-4ccf-91e9-f824fee40dc6.jpg?im_w=720" alt="Locație 6">
+                            <img src="https://a0.muscache.com/im/pictures/013b28cc-9b53-4834-bfca-e87b532fe2b3.jpg?im_w=720" alt="Locație 6">
+                            <img src="https://a0.muscache.com/im/pictures/67476d84-a3fd-4b96-a20e-51f92b138ecb.jpg?im_w=720" alt="Locație 6">
+                        </div>
+                        <a href="#" class="btn btn-primary">Vezi Detalii</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <img src="" alt="Imagine mărită" id="lightbox-img">
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2025 Ghidion. Toate drepturile rezervate.</p>
+            <div class="mt-3">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Lightbox functionality
+        const thumbnails = document.querySelectorAll('.gallery-thumbnails img');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                lightboxImg.src = thumbnail.src;
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
